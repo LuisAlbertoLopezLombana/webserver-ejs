@@ -1,15 +1,22 @@
 {
-  "name": "historias-clinicas",
-  "version": "1.0.0",
-  "description": "--- author: Luis Alberto López Lombana ms.author: Luis Alberto López Lombana  ms.date: 11/04/2020 --- # Logger",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "ejs": "^3.0.2",
-    "express": "^4.17.1"
-  }
+    "name": "historias-clinicas",
+    "version": "1.0.0",
+    "description": "--- author: Luis Alberto López Lombana ms.author: Luis Alberto López Lombana  ms.date: 11/04/2020 --- # Logger",
+    "main": "index.js",
+    "scripts": {
+        "start": "node server/server",
+        "nodemon": "nodemon server/server.js -e js,html,ejs",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bunyan": "^1.8.12",
+        "bunyan-express-serializer": "^1.0.0",
+        "ejs": "^3.0.2",
+        "express": "^4.17.1",
+        "express-request-id": "^1.4.1",
+        "morgan": "^1.10.0",
+        "node-uuid": "^1.4.8"
+    }
 }
