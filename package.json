@@ -11,12 +11,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "bunyan": "^1.8.12",
-        "bunyan-express-serializer": "^1.0.0",
         "ejs": "^3.0.2",
         "express": "^4.17.1",
-        "express-request-id": "^1.4.1",
-        "morgan": "^1.10.0",
-        "node-uuid": "^1.4.8"
+        "express-pino-logger": "^4.0.0",
+        "node-uuid": "^1.4.8",
+        "pino": "^6.2.0",
+        "pino-http": "^5.0.0",
+        "pino-multi-stream": "^5.0.0",
+        "typedi": "^0.8.0"
     }
 }

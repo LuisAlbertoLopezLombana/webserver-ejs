@@ -1,49 +1,50 @@
-const express = require('express');
-const path = require('path');
-const ejs = require('ejs');
-const app = express();
-const LoggerService = require('./services/logger_service');
-const loggerService = new LoggerService('server');
-const morgan = require('./morgan');
-const uuid = require('node-uuid');
+ const express = require('express');
+ const path = require('path');
+ const ejs = require('ejs');
+ const app = express();
+ const Container = require("typedi").Container;
+ const uuid = require('node-uuid');
+ const { LoggerController } = require('./controller/LoggerController');
+ const pinoMultiStream = require('./config/pinoMultiStream');
 
-app.use(addIdRequest());
+ var loggerController = Container.get(LoggerController);
 
-app.engine('.html', ejs.__express);
-app.set('views', path.join(__dirname, '/../views'));
-app.set('view engine', 'html');
+ console.log(pinoMultiStream);
 
+ loggerController.logger.build('App', pinoMultiStream);
 
-app.use(morgan.middleStatusCodeStdErr());
-app.use(morgan.middleStatusCodeStdOut());
-app.use(loggerService.requestMid());
-app.use(loggerService.afterResponseMid());
+ app.use(addIdRequest());
+ app.engine('.html', ejs.__express);
+ app.set('views', path.join(__dirname, '/../views'));
+ app.set('view engine', 'html');
 
-let users = [
-    { name: 'Sebastian', email: 'Sebastian@ejs.com' },
-    { name: 'Ivan', email: 'Ivan@ejs.com' },
-    { name: 'Luis Alberto', email: 'Luis@ejs.com' }
-];
+ app.use(loggerController.logger.requestMid());
+ app.use(loggerController.logger.afterResponseMid());
 
-
-app.get('/', (req, res) => {
-    let response = { users, title: 'Ciclo en EJS', header: 'Usuarios' }
-    loggerService.logResponse(req.id, response, 200);
-    res.status(200).render('users', response);
-});
+ let users = [
+     { name: 'Sebastian', email: 'Sebastian@ejs.com' },
+     { name: 'Ivan', email: 'Ivan@ejs.com' },
+     { name: 'Luis Alberto', email: 'Luis@ejs.com' }
+ ];
 
 
-function addIdRequest() {
-    return (req, res, next) => {
-        req.id = uuid.v4();
-        next();
-    };
-}
+ app.get('/', (req, res) => {
+     let response = { users, title: 'Ciclo en EJS', header: 'Usuarios' }
+     res.status(200).render('users', response);
+ });
 
 
-const port = process.env.PORT || 3000;
+ function addIdRequest() {
+     return (req, res, next) => {
+         req.id = uuid.v4();
+         next();
+     };
+ }
 
-app.set('port', port);
-const server = app.listen(app.get('port'), () => {
-    console.log(`Express running → PORT ${server.address().port}`);
-});
+
+ const port = process.env.PORT || 3000;
+
+ app.set('port', port);
+ const server = app.listen(app.get('port'), () => {
+     console.log(`Express running → PORT ${server.address().port}`);
+ });
